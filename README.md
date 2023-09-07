@@ -95,6 +95,48 @@ CREATE table tblGPTLogs (
 )
 
 ```
+#### 2.4 Azure Stream Analytics
+实时读取eventhub k1 (input), 并将非流式的response写入Azure SQL DB (output)中， 流式的response写入eventhub kstream(output)中。 <br/>
+query如下:
+``` sql
+SELECT
+    DATEADD(hour, 8, CAST(ehgpt.EventTime AS DATETIME)) AS EventTime,
+    ehgpt.ServiceName AS ServiceName,
+    ehgpt.RequestId AS RequestId,
+    ehgpt.RequestIp AS RequestIp,
+    ehgpt.OperationName AS OperationName,
+    ehgpt.RequestBody AS RequestBody,
+    ehgpt.ResponseBody AS ResponseBody,
+    ehgpt.Region as Region,
+    ehgpt.BackendUrl as BackendUrl,
+    '0' as Streaming
+INTO
+    [sqllog]
+FROM
+    [ehgpt] TIMESTAMP BY CAST(ehgpt.EventTime AS DATETIME)
+WHERE
+    LEFT(ehgpt.ResponseBody, 1) = '{'
+
+
+SELECT
+    CAST(ehgpt.EventTime AS DATETIME) AS EventTime,
+    ehgpt.ServiceName AS ServiceName,
+    ehgpt.RequestId AS RequestId,
+    ehgpt.RequestIp AS RequestIp,
+    ehgpt.OperationName AS OperationName,
+    ehgpt.RequestBody AS RequestBody,
+    ehgpt.ResponseBody AS ResponseBody,
+    ehgpt.Region as Region,
+    ehgpt.BackendUrl as BackendUrl,
+    '1' as Streaming
+INTO
+    [streamlog]
+FROM
+    [ehgpt] TIMESTAMP BY CAST(ehgpt.EventTime AS DATETIME)
+WHERE
+    LEFT(ehgpt.ResponseBody, 4) = 'data'
+```
+
 
 ### 数据展示
 可以用PowerBI直接连Azure SQL DB
