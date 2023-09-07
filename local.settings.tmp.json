@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "xxx",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "evtkfk_sendlisten_EVENTHUB": "xxx",
+    "GPTLOGS_SQLDB": "Server=xxx,1433;Database=dbGPT;Uid=xxx;Pwd=xxx;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+    
+
+  }
+}
