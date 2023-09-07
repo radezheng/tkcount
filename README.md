@@ -15,8 +15,29 @@
 ```
 
 ### 2. 前提
-#### 2.1 Azure APIM
-这需要在APIM的policy中添加如下代码，用于将AOAI的response转换成上述格式。并且需要在APIM中添加一个outbound policy，用于将上述格式的response发送到Azure Function中。
+
+#### 2.1 Azure Eventhub
+在一个eventhub服务(命名空间)里建两个eventhub实体， k1和kstream
+
+#### 2.2 Azure APIM
+这需要在APIM的policy中添加如下代码，用于将AOAI的response转换成上述格式。并且需要在APIM中添加一个outbound policy，用于将上述格式的response发送到Azure Function中。 <br/>
+在APIM里创建evtLogger1 logger，用于将日志发送到Azure Eventhub中。 <br/>
+``` powershell
+#login to azure
+Connect-AzAccount -TenantId  16b3c013-d300-468d-ac64-7eda0820b6d3
+
+# API Management service-specific details
+$apimServiceName = "apimxxx"
+$resourceGroupName = "rgxxx"
+
+# Create logger
+$context = New-AzApiManagementContext -ResourceGroupName $resourceGroupName -ServiceName $apimServiceName
+# Name is the hub instance name
+New-AzApiManagementLogger -Context $context -LoggerId "evtLogger1" -Name "k1" -ConnectionString "xxx" -Description "Event hub logger with connection string"
+
+
+```
+在APIM里创建一个outbound policy <br/>
 ```xml
 <policies>
 	<inbound>
@@ -54,8 +75,6 @@
 ```
 具体的apim配置参考： https://github.com/radezheng/tsgptAAD#%E9%85%8D%E7%BD%AEazure%E8%B5%84%E6%BA%90
 
-#### 2.2 Azure Eventhub
-在一个eventhub服务(命名空间)里建两个eventhub实体， k1和kstream
 
 #### 2.3 Azure SQL
 建库建表，建表语句如下：
