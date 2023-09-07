@@ -96,7 +96,7 @@ CREATE table tblGPTLogs (
 
 ```
 #### 2.4 Azure Stream Analytics
-实时读取eventhub k1 (input), 并将非流式的response写入Azure SQL DB (output)中， 流式的response写入eventhub kstream(output)中。 <br/>
+实时读取eventhub k1 (input - ehgpt), 并将非流式的response写入Azure SQL DB (output - sqllog)中， 流式的response写入eventhub kstream(output - streamlog)中。 <br/>
 query如下:
 ``` sql
 SELECT
