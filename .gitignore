@@ -127,6 +127,7 @@ bin
 obj
 appsettings.json
 local.settings.json
+*.drawio
 
 # Azurite artifacts
 __blobstorage__

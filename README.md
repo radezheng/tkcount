@@ -1,7 +1,10 @@
 # 流式Azure OpenAI gpt token计数
 
 ### 1. 介绍
-这是结合azure API Management和Azure Function实现的一个流式计数器，可直接部署在Azure Functions App上，用于计算Azure OpenAI GPT-3/4流式的token使用情况。并存放在Azure SQL DB中。AOAI 将流式的response转换成如下格式:
+这是结合azure API Management和Azure Function实现的一个流式计数器，可直接部署在Azure Functions App上，用于计算Azure OpenAI GPT-3/4流式的token使用情况。并存放在Azure SQL DB中。
+这项目的架构如下,主要涉及红框中的组件：
+![image](./img/tkcount.png)
+Azure Functions 将流式的response转换成如下格式, 仅供参考，不作计费使用:
 ```json
  { 
         "messages": "",
@@ -13,7 +16,6 @@
         }
     }
 ```
-
 ### 2. 前提
 
 #### 2.1 Azure Eventhub
